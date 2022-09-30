@@ -12,7 +12,7 @@ import java.util.Random;
 @SpringBootApplication
 public class Application {
 
-    private HashMap<String, String> full_short = new HashMap<String, String>(); // key: full URL; value - shorted url
+    private HashMap<String, String> full_short = new HashMap<String, String>(); // key: full URL; value: shorted url
 
     @GetMapping("/{urlToBeShortened}/short")
     @ResponseBody
