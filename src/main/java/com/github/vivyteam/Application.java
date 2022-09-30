@@ -1,13 +1,12 @@
 package com.github.vivyteam;
 
-
+import java.util.HashMap;
+import java.util.Random;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.Random;
 
 @SpringBootApplication
 public class Application {
