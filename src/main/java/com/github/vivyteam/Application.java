@@ -1,12 +1,12 @@
 package com.github.vivyteam;
 
-import java.util.HashMap;
-import java.util.Random;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
+import java.util.HashMap;
+import java.util.Random;
 
 @SpringBootApplication
 public class Application {
@@ -15,17 +15,19 @@ public class Application {
 
     @GetMapping("/{urlToBeShortened}/short")
     @ResponseBody
-    public  String toShortURL(@PathVariable("urlToBeShortened") String urlToBeShortened) { // shorten a URL
-        String getShortURL = mapShortURL(urlToBeShortened);
-        return "http://localhost:9000/"+getShortURL;
+    public String toShortURL(@PathVariable("urlToBeShortened") String urlToBeShortened) { // shorten a URL
+        String getShortURL = full_short.getOrDefault(urlToBeShortened, mapShortURL(urlToBeShortened));
+        return "http://localhost:9000/" + getShortURL;
     }
 
     @GetMapping("/{shortenedUrl}/full") //short-to-full
     @ResponseBody
     public String getFullURL(@PathVariable("shortenedUrl") String shortenedUrl) {
-        for (Object key: full_short.keySet()) {
-            if (full_short.get(key).equals(shortenedUrl))
-                return key.toString();
+        if (full_short.containsValue(shortenedUrl)) {
+            for (Object key: full_short.keySet()) {
+                if (full_short.get(key).equals(shortenedUrl))
+                    return key.toString();
+            }
         }
         return "Missing URL";
     }
@@ -44,10 +46,11 @@ public class Application {
     }
 
     public String mapShortURL(String fullURL){
-        if (full_short.containsKey(fullURL)) {
-            return full_short.get(fullURL);
-        }
+
         String shortURL = encodeURL(12);// Generate a 12-bit random string, or any length you want
+        while (full_short.containsValue(shortURL)) {
+            shortURL = encodeURL(12);
+        }
         full_short.put(fullURL, shortURL);
         return shortURL;
     }
