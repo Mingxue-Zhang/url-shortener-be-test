@@ -16,7 +16,7 @@ public class UrlApi {
     @GetMapping("/{url}/short")
     public Mono<ShortenedUrl> shortUrl(@PathVariable final String url) {
         // TODO: implement logic to shorten the url
-        String getShortURL = "http://localhost:9000/"+ mapShortURL(url);
+        String getShortURL = full_short.getOrDefault(url, mapShortURL(url));
         //return getShortURL;
         return Mono.just(new ShortenedUrl(getShortURL));
     }
@@ -43,17 +43,17 @@ public class UrlApi {
     }
 
     public String mapShortURL(String fullURL){
-        if (full_short.containsKey(fullURL)) {
-            return full_short.get(fullURL);
-        }
         String shortURL = encodeURL(12);// Generate a 12-bit random string, or any length you want
+        while (full_short.containsValue(shortURL)) {
+            shortURL = encodeURL(12);
+        }
         full_short.put(fullURL, shortURL);
         return shortURL;
     }
     public String encodeURL(int length){
-        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random=new Random();
-        StringBuffer sb=new StringBuffer();
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
         for(int i = 0; i < length; i++ ) {
             int number=random.nextInt(62);
             sb.append(str.charAt(number));
