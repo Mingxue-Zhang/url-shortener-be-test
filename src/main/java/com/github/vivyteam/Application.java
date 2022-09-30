@@ -48,7 +48,7 @@ public class Application {
     public String mapShortURL(String fullURL){
 
         String shortURL = encodeURL(12);// Generate a 12-bit random string, or any length you want
-        while (full_short.containsValue(shortURL)) {
+        while (full_short.containsValue(shortURL)) { // make the shorted URL unique
             shortURL = encodeURL(12);
         }
         full_short.put(fullURL, shortURL);
@@ -60,7 +60,7 @@ public class Application {
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
         for(int i = 0; i < length; i++ ) {
-            int number=random.nextInt(62);
+            int number=random.nextInt(62); // length ^ 62
             sb.append(str.charAt(number));
         }
         return sb.toString();
